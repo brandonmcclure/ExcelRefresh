@@ -5,9 +5,7 @@ trigger:
     - master
  paths:
     include:
-    - SpiderScreensaver.sln
-    - SpiderScreensaver/*
-    - build/*
+    - XLRefresh.sln
 
 pool:
   name: Hosted VS2017
@@ -24,6 +22,13 @@ variables:
   BuildConfiguration: release
 
 
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'sq ExcelRefresh'
+    organization: 'brandonmcclure-github'
+    scannerMode: 'MSBuild'
+    projectKey: 'brandonmcclure_ExcelRefresh'
+    projectName: 'brandonmcclure_ExcelRefresh'
 
 - task: NuGetToolInstaller@0
   displayName: 'Use NuGet 4.4.1'
@@ -69,30 +74,11 @@ variables:
     Contents: '**\bin\$(BuildConfiguration)\**'
     TargetFolder: '$(build.artifactstagingdirectory)'
 
-- powershell: |   
-   Write-Host " We are: at $(Get-Location)"
-   Write-Host "env:SYSTEM_ARTIFACTSDIRECTORY = $env:SYSTEM_ARTIFACTSDIRECTORY"
-   
-   if ($(system.debug)){
-    Write-Host "env:AGENT_RELEASEDIRECTORY = $env:AGENT_RELEASEDIRECTORY"
-    ls "$env:SYSTEM_ARTIFACTSDIRECTORY\MyScreensaver_wpf\bin\Release\"
-   }
-   copy-item "$env:SYSTEM_ARTIFACTSDIRECTORY\MyScreensaver_wpf\bin\Release\MyScreensaver_wpf.exe" "$env:SYSTEM_ARTIFACTSDIRECTORY\MyScreensaver_wpf\bin\Release\MyScreensaver_wpf.scr"
-   
-   return 0
-   # Use the environment variables input below to pass secret variables to this script.
-  displayName: 'copy exe into .scr file'
 
 - task: ArchiveFiles@2
   displayName: 'Archive $(Build.artifactstagingdirectory)'
   inputs:
     rootFolderOrFile: '$(Build.artifactstagingdirectory)'
-
-- task: CopyFiles@2
-  displayName: 'Copy release script to artifact staging directory'
-  inputs:
-    SourceFolder: build
-    TargetFolder: '$(build.artifactstagingdirectory)\build'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
