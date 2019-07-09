@@ -85,6 +85,7 @@ steps:
     PathtoPublish: '$(build.artifactstagingdirectory)'
 
 - task: SonarCloudPublish@1
+  displayName: 'SonarCloudPublish'
   inputs:
     pollingTimeoutSec: '300'
 
