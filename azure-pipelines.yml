@@ -19,7 +19,7 @@ variables:
   configuration: debug
   system.debug: false
   BuildPlatform: any cpu
-  BuildConfiguration: release
+  BuildConfiguration: debug
 
 steps:
 - task: SonarCloudPrepare@1
