@@ -46,8 +46,7 @@ variables:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
 
-- task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
-  displayName: 'Run Code Analysis'
+- task: SonarCloudAnalyze@1
 
 - task: VSTest@2
   displayName: 'VsTest - testAssemblies'
@@ -83,4 +82,8 @@ variables:
   displayName: 'Publish Artifact: drop'
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
+
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
 
