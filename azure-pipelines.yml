@@ -21,6 +21,7 @@ variables:
   BuildPlatform: any cpu
   BuildConfiguration: release
 
+steps:
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'sq ExcelRefresh'
